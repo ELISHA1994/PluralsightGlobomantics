@@ -4,6 +4,9 @@ import './main-page.css';
 import Header from './header';
 
 class App extends Component {
+
+  state = {}
+  
   fetchHouses = () => {
     fetch('/houses.json')
     .then(rps => rps.json())
