@@ -6,7 +6,11 @@ import Header from './header';
 class App extends Component {
 
   state = {}
-  
+
+  componentDidMount() {
+    this.fetchHouses();
+  }
+
   fetchHouses = () => {
     fetch('/houses.json')
     .then(rps => rps.json())
