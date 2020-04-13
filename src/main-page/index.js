@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './main-page.css';
 import Header from './header';
 import FeaturedHouse from './featured-house';
+import HouseFilter from './house-filter';
 
 class App extends Component {
 
@@ -42,6 +43,7 @@ class App extends Component {
     return (
       <div className="container">
         <Header subtitle="Providing houses world wide"/>
+        <HouseFilter countries={this.state.countries} />
         <FeaturedHouse house={this.state.featuredHouse} />
       </div>
     );
