@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
+import logo from './logo.svg';
 import './main-page.css';
 import Header from './header';
 import FeaturedHouse from './featured-house';
 import HouseFilter from './house-filter';
+import SearchResults from '../search-results';
+import HouseDetail from '../house';
 
 class App extends Component {
-
   state = {}
 
   componentDidMount() {
@@ -15,7 +16,7 @@ class App extends Component {
 
   fetchHouses = () => {
     fetch('/houses.json')
-    .then(rps => rps.json())
+    .then(rsp => rsp.json())
     .then(allHouses => {
       this.allHouses = allHouses;
       this.determineFeaturedHouse();
@@ -40,17 +41,30 @@ class App extends Component {
   }
 
   filterHouses = (country) => {
-    const filterHouses = this.allHouses.filter((h) => h.country === country);
-    this.setState({ filterHouses });
+    this.setState({ activeHouse: null });
+    const filteredHouses = this.allHouses.filter((h) => h.country === country);
+    this.setState({ filteredHouses });
     this.setState({ country });
+  }
+  
+  setActiveHouse = (house) => {
+    this.setState({ activeHouse: house });
   }
 
   render() {
+    let activeComponent = null;
+    if (this.state.country)
+    activeComponent = <SearchResults country={this.state.country} 
+      filteredHouses={this.state.filteredHouses} setActiveHouse={this.setActiveHouse} />;
+    if (this.state.activeHouse)
+      activeComponent = <HouseDetail house={this.state.activeHouse}/>;
+    if (!activeComponent)
+      activeComponent = <FeaturedHouse house={this.state.featuredHouse} />;
     return (
       <div className="container">
-        <Header subtitle="Providing houses world wide"/>
+        <Header subtitle="Providing houses all over the world"/>
         <HouseFilter countries={this.state.countries} filterHouses={this.filterHouses} />
-        <FeaturedHouse house={this.state.featuredHouse} />
+        {activeComponent}
       </div>
     );
   }
